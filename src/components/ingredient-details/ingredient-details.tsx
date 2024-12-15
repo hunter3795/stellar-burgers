@@ -1,10 +1,20 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
+import { useSelector } from 'react-redux';
+import { RootState, useDispatch } from '../../services/store';
+import { TIngredient } from '@utils-types';
+import { useParams } from 'react-router-dom';
+import { selectIngredients } from '../../services/slices/ingredients';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const ingredientData = null;
+  const ingredients = useSelector(selectIngredients);
+
+  const { id } = useParams();
+
+  const ingredientData = ingredients.find(
+    (ingredient) => ingredient._id === id
+  );
 
   if (!ingredientData) {
     return <Preloader />;
