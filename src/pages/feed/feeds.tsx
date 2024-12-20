@@ -6,8 +6,13 @@ import { useDispatch, useSelector } from '../../services/store';
 import { fetchFeeds, selectFeeds } from '../../services/slices/feeds';
 
 export const Feed: FC = () => {
-  const orders: TOrder[] = useSelector(selectFeeds);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchFeeds());
+  }, []);
+
+  const orders: TOrder[] = useSelector(selectFeeds);
 
   if (!orders.length) {
     return <Preloader />;
@@ -17,7 +22,7 @@ export const Feed: FC = () => {
     <FeedUI
       orders={orders}
       handleGetFeeds={() => {
-        dispatch(fetchFeeds);
+        dispatch(fetchFeeds());
       }}
     />
   );

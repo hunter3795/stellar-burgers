@@ -1,37 +1,48 @@
 import {
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi,
   TAuthResponse,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  TUserResponse,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';
-import { setCookie } from '../../utils/cookie';
+import { deleteCookie, setCookie } from '../../utils/cookie';
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
   async () => await getUserApi()
 );
 
-const registerUser = createAsyncThunk<TAuthResponse, TRegisterData>(
+export const registerUser = createAsyncThunk<TAuthResponse, TRegisterData>(
   'user/registerUser',
   async (dataUser) => {
     const data = await registerUserApi(dataUser);
     setCookie('accessToken', data.accessToken);
-    setCookie('refreshToken', data.refreshToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
     return data;
   }
 );
 
-const loginUser = createAsyncThunk<TAuthResponse, TLoginData>(
+export const loginUser = createAsyncThunk<TAuthResponse, TLoginData>(
   'user/loginUser',
   async (dataUser) => {
     const data = await loginUserApi(dataUser);
     setCookie('accessToken', data.accessToken);
-    setCookie('refreshToken', data.refreshToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data;
+  }
+);
+
+export const updateUser = createAsyncThunk<TUserResponse, TRegisterData>(
+  'user/updateUser',
+  async (dataUser) => {
+    const data = await updateUserApi(dataUser);
     return data;
   }
 );
@@ -56,6 +67,9 @@ const userSlice = createSlice({
   reducers: {
     authCheck: (state) => {
       state.isAuthChecked = true;
+    },
+    logout: (state) => {
+      state.data = null;
     }
   },
   selectors: {
@@ -99,10 +113,37 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload.user;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload.user;
       });
   }
 });
 
-export const userAction = userSlice.actions;
-export const userSelectors = userSlice.selectors;
+export const { authCheck, logout } = userSlice.actions;
+export const { getUser, getIsAuthChecked } = userSlice.selectors;
 export default userSlice.reducer;
+
+export const logoutUser = createAsyncThunk(
+  'user/logoutUser',
+  (_, { dispatch }) => {
+    logoutApi()
+      .then(() => {
+        localStorage.clear();
+        deleteCookie('accessToken');
+        dispatch(logout());
+      })
+      .catch((err) => {
+        console.log('Ошибка выполнения выхода', err);
+      });
+  }
+);

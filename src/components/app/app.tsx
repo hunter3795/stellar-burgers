@@ -17,9 +17,8 @@ import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredients';
-import { fetchFeeds } from '../../services/slices/feeds';
 import ProtectedRoute from '../../services/protected-route/protected-route';
-import { checkUserAuth, userAction } from '../../services/slices/user';
+import { authCheck, checkUserAuth } from '../../services/slices/user';
 
 const App = () => {
   const location = useLocation();
@@ -28,10 +27,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(fetchFeeds());
     dispatch(checkUserAuth())
       .unwrap()
-      .finally(() => dispatch(userAction.authCheck()));
+      .catch((err) => console.log(err))
+      .finally(() => dispatch(authCheck()));
   }, [dispatch]);
 
   const onClose = () => {
@@ -46,6 +45,7 @@ const App = () => {
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/login'
@@ -95,7 +95,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* <Route path='*' element={<NotFound404 />} /> */}
+        <Route path='*' element={<NotFound404 />} />
       </Routes>
 
       {background && (
@@ -120,7 +120,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title={''} onClose={onClose}>
+                <Modal title={'Детали заказа'} onClose={onClose}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

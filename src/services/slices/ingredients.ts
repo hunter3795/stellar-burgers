@@ -1,5 +1,10 @@
 import { getIngredientsApi } from '../../utils/burger-api';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  nanoid,
+  PayloadAction
+} from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 
 export const fetchIngredients = createAsyncThunk(
@@ -31,12 +36,17 @@ const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {
-    addConstructorIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.constructorItems.bun = action.payload;
-      } else {
-        state.constructorItems.ingredients.push(action.payload);
-      }
+    addConstructorIngredient: {
+      reducer: (state, action: PayloadAction<TIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.constructorItems.bun = action.payload;
+        } else {
+          state.constructorItems.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: nanoid() }
+      })
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
       state.constructorItems.ingredients.splice(action.payload, 1);
