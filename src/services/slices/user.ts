@@ -14,10 +14,7 @@ import { TUser } from '@utils-types';
 import { error } from 'console';
 import { deleteCookie, setCookie } from '../../utils/cookie';
 
-export const checkUserAuth = createAsyncThunk(
-  'user/checkUserAuth',
-  async () => await getUserApi()
-);
+export const checkUserAuth = createAsyncThunk('user/checkUserAuth', getUserApi);
 
 export const registerUser = createAsyncThunk<TAuthResponse, TRegisterData>(
   'user/registerUser',

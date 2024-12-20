@@ -17,15 +17,12 @@ export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchFeeds());
-    dispatch(fetchGetOrders());
-  }, []);
-
   const orderData = useSelector(ordersInfoDataSelector(number!));
   useEffect(() => {
     if (!orderData) {
       dispatch(getOrderByNumber(Number(number)));
+      dispatch(fetchFeeds());
+      dispatch(fetchGetOrders());
     }
   }, [dispatch, orderData, number]);
 
