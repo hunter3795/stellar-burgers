@@ -8,7 +8,7 @@ import {
   TRegisterData,
   TUserResponse,
   updateUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { error } from 'console';

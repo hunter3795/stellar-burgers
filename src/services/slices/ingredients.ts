@@ -59,6 +59,9 @@ const ingredientsSlice = createSlice({
       const ingredients = [...state.constructorItems.ingredients];
       ingredients.splice(to, 0, ingredients.splice(from, 1)[0]);
       state.constructorItems.ingredients = ingredients;
+    },
+    clearConstructor: (state: IngredientsListState) => {
+      state.constructorItems = initialState.constructorItems;
     }
   },
   selectors: {
@@ -87,5 +90,9 @@ const ingredientsSlice = createSlice({
 export const { selectIngredients, selectIsLoading, selectConstructorItems } =
   ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;
-export const { addConstructorIngredient, removeIngredient, reorderConstuctor } =
-  ingredientsSlice.actions;
+export const {
+  addConstructorIngredient,
+  removeIngredient,
+  reorderConstuctor,
+  clearConstructor
+} = ingredientsSlice.actions;

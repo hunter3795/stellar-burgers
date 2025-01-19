@@ -9,8 +9,7 @@ import { selectIngredients } from '../../services/slices/ingredients';
 import {
   fetchGetOrders,
   getOrderByNumber,
-  ordersInfoDataSelector,
-  selectOrderModalData
+  ordersInfoDataSelector
 } from '../../services/slices/orders';
 
 export const OrderInfo: FC = () => {
