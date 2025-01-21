@@ -65,8 +65,9 @@ describe('тестируем создание заказа', () => {
     cy.get('[data-cy=sauses-ingredients]').contains('Добавить').click();
     cy.contains('Оформить заказ').click();
     cy.get('#modals').contains('123456').should('exist');
-    // cy.get('#overlay').click('left', { force: true });
-    // cy.contains('Выберите булки').should('exist');
-    // cy.contains('Выберите начинку').should('exist');
+    cy.get('#overlay').click('left', { force: true });
+    cy.get('#modals').contains('123456').should('not.exist');
+    cy.contains('Выберите булки').should('exist');
+    cy.contains('Выберите начинку').should('exist');
   });
 });
