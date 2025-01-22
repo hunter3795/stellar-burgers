@@ -1,25 +1,13 @@
 import userReducer, {
   checkUserAuth,
+  initialState,
   loginUser,
   registerUser,
   updateUser
 } from '../src/services/slices/user';
 import { describe, expect, test } from '@jest/globals';
-import { TUser } from '../src/utils/types';
 
 describe('проверка слайса userSlice', () => {
-  interface IUserState {
-    isAuthChecked: boolean;
-    data: TUser | null;
-    isLoading: boolean;
-    error: string | null | undefined;
-  }
-  const initialState: IUserState = {
-    isAuthChecked: false,
-    data: null,
-    isLoading: false,
-    error: null
-  };
   describe('тест санки checkUserAuth', () => {
     test('проверка экщена Request', () => {
       const newState = userReducer(initialState, {

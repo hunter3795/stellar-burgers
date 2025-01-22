@@ -32,7 +32,7 @@ interface OrderListState {
   ordersInfoData: TOrder | null;
 }
 
-const initialState: OrderListState = {
+export const initialState: OrderListState = {
   orders: [],
   isLoading: false,
   error: null,

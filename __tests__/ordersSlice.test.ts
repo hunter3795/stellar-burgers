@@ -1,28 +1,12 @@
 import ordersReducer, {
   fetchGetOrders,
   getOrderByNumber,
+  initialState,
   orderBurger
 } from '../src/services/slices/orders';
 import { describe, expect, test } from '@jest/globals';
-import { TOrder } from '../src/utils/types';
 
 describe('проверка редьюсеров слайса orders', () => {
-  interface OrderListState {
-    orders: TOrder[];
-    isLoading: boolean;
-    error: string | null | undefined;
-    orderNumberModalData: TOrder | null;
-    orderRequest: boolean;
-    ordersInfoData: TOrder | null;
-  }
-  const initialState: OrderListState = {
-    orders: [],
-    isLoading: false,
-    error: null,
-    orderNumberModalData: null,
-    orderRequest: false,
-    ordersInfoData: null
-  };
   describe('тест fetchGetOrders', () => {
     test('проверка экшена Request', () => {
       const newState = ordersReducer(initialState, {

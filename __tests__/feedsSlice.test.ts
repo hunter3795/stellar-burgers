@@ -1,22 +1,10 @@
-import feedsReducer, { fetchFeeds } from '../src/services/slices/feeds';
+import feedsReducer, {
+  fetchFeeds,
+  initialState
+} from '../src/services/slices/feeds';
 import { describe, expect, test } from '@jest/globals';
-import { TOrdersData } from '../src/utils/types';
 
 describe('проверка редьюсеров слайса feeds', () => {
-  interface IFeedsState {
-    feedsData: TOrdersData;
-    isLoading: boolean;
-    error: string | null | undefined;
-  }
-  const initialState: IFeedsState = {
-    feedsData: {
-      orders: [],
-      total: 0,
-      totalToday: 0
-    },
-    isLoading: false,
-    error: null
-  };
   test('проверка экшена Request', () => {
     const newState = feedsReducer(initialState, {
       type: fetchFeeds.pending.type
